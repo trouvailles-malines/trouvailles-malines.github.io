@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mes trouvailles</title>
 <meta name="description" content="Les objets malins vus dans mes vidéos TikTok">
+<meta name="referrer" content="no-referrer">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -85,7 +86,7 @@ const A = [
 const list = document.getElementById("list");
 list.innerHTML = A.map((p,i) => ({...p,n:i+1})).reverse().map(p => `
   <a class="card" data-n="${p.n}" data-cat="${p.cat}" href="${p.url}" target="_blank" rel="noopener sponsored">
-    <span class="num">N°${p.n}</span><div class="ico"><img src="${PIC[p.id]}_220x220.jpg" alt="" loading="lazy"></div>
+    <span class="num">N°${p.n}</span><div class="ico"><img src="${PIC[p.id]}_220x220.jpg" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${PIC[p.id]}'" alt=""></div>
     <div class="info">
       <span class="badge">${p.badge}</span>
       <div class="name">${p.name}</div>
