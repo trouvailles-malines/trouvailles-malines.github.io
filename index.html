@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mes trouvailles</title>
+<meta name="description" content="Les objets malins vus dans mes vidéos TikTok">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0f14;--card:#1a1a23;--line:#2a2a36;--txt:#f5f5f7;--mute:#a0a0b2;--acc:#ff9900;--acc2:#ffb84d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:Poppins,system-ui,sans-serif;min-height:100vh;
+    background-image:radial-gradient(circle at 50% -10%,rgba(255,153,0,.18),transparent 55%)}
+  .wrap{max-width:480px;margin:0 auto;padding:32px 18px 48px}
+  header{text-align:center;margin-bottom:22px}
+  .logo{width:84px;height:84px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:40px;
+    background:linear-gradient(135deg,var(--acc),#ff5e3a);box-shadow:0 8px 30px rgba(255,153,0,.35)}
+  h1{font-size:24px;font-weight:800}
+  .sub{color:var(--mute);font-size:14px;margin-top:4px}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--txt);padding:8px 14px;border-radius:999px;
+    font:600 13px Poppins,sans-serif;cursor:pointer}
+  .chip.on{background:var(--acc);border-color:var(--acc);color:#111}
+  .card{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:14px;margin-bottom:12px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s}
+  .card:active,.card:hover{transform:scale(.98);border-color:var(--acc)}
+  .ico img{width:100%;height:100%;object-fit:cover;border-radius:14px}
+  .ico{overflow:hidden;flex:none;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;font-size:30px;background:#24242f}
+  .info{flex:1;min-width:0}
+  .badge{display:inline-block;font-size:10.5px;font-weight:700;color:#111;background:var(--acc2);padding:2px 8px;border-radius:6px;margin-bottom:4px}
+  .name{font-weight:700;font-size:15px;line-height:1.25}
+  .why{color:var(--mute);font-size:12.5px;margin-top:3px;line-height:1.35}
+  .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .price{font-weight:800;color:var(--acc);font-size:15px}
+  .stars{font-size:12px;color:var(--mute)}
+  .btn{flex:none;background:var(--acc);color:#111;font-weight:800;font-size:12px;padding:9px 12px;border-radius:10px}
+  footer{margin-top:26px;color:var(--mute);font-size:11.5px;text-align:center;line-height:1.5}
+  .hide{display:none}
+  .num{position:absolute;top:-6px;left:-6px;background:#fff;color:#111;font-weight:800;font-size:12px;border-radius:999px;padding:2px 7px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+  .card{position:relative}
+  .search{width:100%;margin:0 0 12px;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--txt);font:500 14px Poppins,sans-serif}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">🔎</div>
+    <h1>Mes trouvailles</h1>
+    <p class="sub">Les objets vus dans mes vidéos 👇<br>Tape le numéro donné dans la vidéo</p>
+  </header>
+
+  <input class="search" id="q" type="search" inputmode="numeric" placeholder="🔎 N° de la vidéo (ex : 3)">
+  <div class="chips" id="chips">
+    <button class="chip on" data-f="all">Tout</button>
+    <button class="chip" data-f="maison">🏠 Maison</button>
+    <button class="chip" data-f="cuisine">🍳 Cuisine</button>
+    <button class="chip" data-f="voiture">🚗 Voiture</button>
+    <button class="chip" data-f="mini">💸 Moins de 10 €</button>
+  </div>
+
+  <div id="list"></div>
+
+  <footer>
+    Les liens de cette page sont des liens affiliés AliExpress : ça ne te coûte rien de plus.<br>
+    Prix indicatifs (« dès » = prix du plus petit modèle), ils peuvent changer.
+  </footer>
+</div>
+
+<script>
+const PIC = {"1005008520099287": "https://ae-pic-a1.aliexpress-media.com/kf/S44d219e6036c4bfaacb8174cfce53bacH.jpg", "1005005588986583": "https://ae-pic-a1.aliexpress-media.com/kf/Sf18181d4f02a4c769aabcc0b2c577416g.jpg", "1005006879297714": "https://ae-pic-a1.aliexpress-media.com/kf/S5af35c80a477411fbaf2bf0161e99404v.jpg", "1005009708458772": "https://ae-pic-a1.aliexpress-media.com/kf/Sf15d73e6c2084a3394ad43cf52f9f790K.jpg", "1005011862988163": "https://ae-pic-a1.aliexpress-media.com/kf/S6b510644292243279a5105beae3e3c39E.jpg", "1005006422500160": "https://ae-pic-a1.aliexpress-media.com/kf/S324d7592ca41424f8219350bdcfdca6dk.jpg", "1005009297533485": "https://ae-pic-a1.aliexpress-media.com/kf/S22bd66c1f34d46feab866fd641edbee2y.jpg", "1005006926453576": "https://ae-pic-a1.aliexpress-media.com/kf/S491cdf67381c4f73bd2f876cb8561380D.jpg", "1005007914556601": "https://ae-pic-a1.aliexpress-media.com/kf/S68bc844cef4e43d8aa593135470f1af6x.jpg", "1005012591435821": "https://ae-pic-a1.aliexpress-media.com/kf/S5fcc7403b46e4f28a5de7e35e95bbf0e6.jpg"};
+const A = [
+  {id:"1005008520099287", url:"https://s.click.aliexpress.com/e/_c4dXHxe7", cat:"maison mini", badge:"+4000 ventes/mois", name:"Éponge magique anti-rouille", why:"Tes poêles et ton inox retrouvent leur éclat.", price:"dès 2,40 €", stars:"4,5 ★"},
+  {id:"1005006926453576", url:"https://s.click.aliexpress.com/e/_c3U3e2RZ", cat:"maison mini", badge:"+20 000 ventes/mois", name:"Scotch double face ultra-fort", why:"Fixe tout au mur sans percer, transparent.", price:"dès 2,12 €", stars:"4,6 ★"},
+  {id:"1005005588986583", url:"https://s.click.aliexpress.com/e/_c2wyAeBt", cat:"maison mini", badge:"+8000 ventes/mois", name:"Lampe LED à détecteur de mouvement", why:"S'allume toute seule dans le placard ou le couloir.", price:"dès 2,47 €", stars:"4,5 ★"},
+  {id:"1005009297533485", url:"https://s.click.aliexpress.com/e/_c3dT5iXp", cat:"maison mini", badge:"Viral TikTok", name:"Lampe coucher de soleil", why:"L'ambiance « golden hour » dans ta chambre.", price:"dès 1,75 €", stars:"4,7 ★"},
+  {id:"1005007914556601", url:"https://s.click.aliexpress.com/e/_c4dGnhfV", cat:"maison mini", badge:"+9000 ventes/mois", name:"Ruban LED RGB avec appli", why:"Change la couleur de ta pièce depuis ton tel.", price:"dès 2,47 €", stars:"4,5 ★"},
+  {id:"1005006879297714", url:"https://s.click.aliexpress.com/e/_c4ph2Iyj", cat:"cuisine mini", badge:"+7000 ventes/mois", name:"Spray à huile (petit prix)", why:"La version mini-prix du spray viral air fryer.", price:"dès 1,70 €", stars:"4,5 ★"},
+  {id:"1005009708458772", url:"https://s.click.aliexpress.com/e/_c3shZDnV", cat:"maison mini", badge:"+12 000 ventes/mois", name:"Tondeuse nez & oreilles USB-C", why:"Rechargeable, compacte, sans douleur.", price:"dès 3,99 €", stars:"4,6 ★"},
+  {id:"1005006422500160", url:"https://s.click.aliexpress.com/e/_c3THlUQr", cat:"voiture mini", badge:"+11 000 ventes/mois", name:"Caméra endoscope USB-C", why:"Regarde dans un tuyau ou un moteur avec ton tel.", price:"dès 4,29 €", stars:"4,5 ★"},
+  {id:"1005012591435821", url:"https://s.click.aliexpress.com/e/_c36jhgkT", cat:"voiture mini", badge:"Test de l'œuf", name:"Coussin gel nid d'abeille", why:"Assise fraîche et confortable en voiture ou au bureau.", price:"dès 6,69 €", stars:"4,6 ★"},
+  {id:"1005011862988163", url:"https://s.click.aliexpress.com/e/_c3DnRAJp", cat:"voiture", badge:"+8800 ventes/mois", name:"Adaptateur CarPlay sans fil", why:"Ton CarPlay / Android Auto sans câble.", price:"dès 16,19 €", stars:"4,5 ★"}
+];
+const list = document.getElementById("list");
+list.innerHTML = A.map((p,i) => ({...p,n:i+1})).reverse().map(p => `
+  <a class="card" data-n="${p.n}" data-cat="${p.cat}" href="${p.url}" target="_blank" rel="noopener sponsored">
+    <span class="num">N°${p.n}</span><div class="ico"><img src="${PIC[p.id]}_220x220.jpg" alt="" loading="lazy"></div>
+    <div class="info">
+      <span class="badge">${p.badge}</span>
+      <div class="name">${p.name}</div>
+      <div class="why">${p.why}</div>
+      <div class="meta"><span class="price">${p.price}</span><span class="stars">${p.stars}</span></div>
+    </div>
+    <span class="btn">Voir →</span>
+  </a>`).join("");
+document.getElementById("chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b) return;
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+  document.querySelectorAll(".card").forEach(c => c.classList.toggle("hide", b.dataset.f !== "all" && !c.dataset.cat.split(" ").includes(b.dataset.f)));
+});
+document.getElementById("q").addEventListener("input", e => {
+  const v = e.target.value.trim();
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.f === "all"));
+  document.querySelectorAll(".card").forEach(c => c.classList.toggle("hide", v !== "" && c.dataset.n !== v));
+});
+</script>
+</body>
+</html>
